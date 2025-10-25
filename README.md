@@ -14,7 +14,7 @@ cd qtai
 cargo install --path .
 ```
 
-Make sure the cargo bin directory is in [PATH](https://www.geeksforgeeks.org/linux-unix/how-to-set-path-permanantly-in-linux/) or else you will stuck running Qtai with `~/.cargo/bin/qtai`.
+Make sure the cargo bin directory is in [PATH](https://www.geeksforgeeks.org/linux-unix/how-to-set-path-permanantly-in-linux/) or else you will stuck running commands starting with `~/.cargo/bin/qtai`.
 
 If not already, you should use a dmenu/dmenu-like application. I currently use [fuzzel](https://codeberg.org/dnkl/fuzzel), but any should work or it's a bug.
 
