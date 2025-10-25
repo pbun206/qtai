@@ -1,6 +1,6 @@
 # Overview
 
-**Qtai** (**Q**uick **t**o **a**ccess **i**tems) is a dmenu/dmenu-clone manager. The main use of case of Qtai is launch a dmenu/dmenu-like application with pre-configured "items". Opposed to manually writing a shell script, Qtai is designed to reduce boilerplate code and be flexible.
+**Qtai** (**Q**uick **t**o **a**ccess **i**tems) is a dmenu/dmenu-like application manager. The main use of case of Qtai is launch a dmenu/dmenu-like application with pre-configured "items". Opposed to manually writing a shell script, Qtai is designed to reduce boilerplate code and be flexible.
 
 Only Linux is tested, though it might work with other Unix-like systems like MacOS.
 
@@ -46,12 +46,12 @@ qtai change-runner '$1'
 However, one of the main features of Qtai is that you can change the runner to whatever you want. Here are some examples:
 
 ```bash
-qtai cr 'librewolf --new-window $1'
 # Opens the Librewolf browser to the value of the item.
-qtai cr 'foot -D $1'
+qtai cr 'librewolf --new-window $1'
 # Opens the foot terminal with the value of the item as the starting directory.
-qtai cr 'hx $1'
+qtai cr 'foot -D $1'
 # Opens helix to the value of the item
+qtai cr 'hx $1'
 ```
 
 Now, let's create some items! In Qtai, we store items in "collections". 
@@ -62,14 +62,17 @@ qtai add-collection "important urls"
 # or qtai ac "important urls"
 ```
 
-`qtai add-item` first argument is the key of the item. When you run the menu, it will show the key. The second argument is the value of the item. This value is what actually used in the runner. The last argument is the collection.
+
+Adding an item is more complicated.
 
 ```bash
 qtai add-item "qtai github" "https://github.com/pbun206/qtai" "important urls"
 # or qtai a qtai_github https://github.com/pbun206/qtai "important files"
 ```
 
-However, writing "important urls" is annoying to type. Autocomplete isn't a feature (at least yet) unfournately. However, if you only type part of it, qtai will guess or go into interactive mode to select between candidates.  
+The first argument is the key of the item. When you run the menu, it will display this key. The second argument is the value of the item. This value is what actually used in the runner. The last argument is the collection where the item to be added.
+
+However, writing "important urls" is annoying to type. Autocomplete isn't a feature (at least yet) unfournately. However, if you only type part of it, qtai will either guess it or go into interactive mode to select between candidates.  
 
 ```bash
 $ qtai add-item "qtai github" "https://github.com/pbun206/qtai" in
@@ -83,7 +86,8 @@ Remove commands are similar:
 
 ```bash
 qtai remove-item github
-# If there is one item with "github", it will delete it automatically. If there are multiple, Qtai will make you select one of them.
+# If there is one item with "github", it will delete it automatically. If there are multiple,
+# Qtai will make you select one of them.
 qtai remove-collection important
 # Similar to remove item but with collections
 
@@ -102,16 +106,15 @@ Here is a general overall of using `qtai run`
 # Run Qtai with all collections
 qtai run
 # or qtai r...
-# Run Qtai with collections with the word "files"
-qtai run "files"
+# Run Qtai with collections with the substring "fil"
+qtai run "fil"
 # Run Qtai with collections that is exactly "files"
 qtai run -s "files" 
 # Run Qtai with a specific runner
 qtai run -s "files" -r 'hx $1'
-# Run Qtai with a TUI menu rather than using gui menu
+# Run Qtai with a TUI menu rather than using GUI menu
 qtai terminal-run -s "files" -r 'hx $1'
 ```
-
 
 # Configuration File
 
@@ -143,7 +146,6 @@ wikipedia = "https://en.wikipedia.org"
 "art" = "~/Pictures/art/"
 
 [collections."quick shortcuts"]
-# This will just run the string.
 default_runner = '$1'
 "hx" = "hx"
 "gnome control center" = "XDG_CURRENT_DESKTOP=gnome && gnome-control-center "
