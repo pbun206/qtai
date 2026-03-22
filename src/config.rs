@@ -34,28 +34,26 @@ impl Config {
                 .iter()
                 .map(|i| (i.0.as_str(), i.1))
                 .collect()
+        } else if selective {
+            self.collections
+                .iter()
+                .filter(|i| {
+                    collections_input
+                        .iter()
+                        .any(|j| i.0.to_lowercase() == j.to_lowercase())
+                })
+                .map(|i| (i.0.as_str(), i.1))
+                .collect()
         } else {
-            if selective {
-                self.collections
-                    .iter()
-                    .filter(|i| {
-                        collections_input
-                            .iter()
-                            .any(|j| i.0.to_lowercase() == j.to_lowercase())
-                    })
-                    .map(|i| (i.0.as_str(), i.1))
-                    .collect()
-            } else {
-                self.collections
-                    .iter()
-                    .filter(|i| {
-                        collections_input
-                            .iter()
-                            .any(|j| i.0.to_lowercase().contains(&j.to_lowercase()))
-                    })
-                    .map(|i| (i.0.as_str(), i.1))
-                    .collect()
-            }
+            self.collections
+                .iter()
+                .filter(|i| {
+                    collections_input
+                        .iter()
+                        .any(|j| i.0.to_lowercase().contains(&j.to_lowercase()))
+                })
+                .map(|i| (i.0.as_str(), i.1))
+                .collect()
         }
     }
 

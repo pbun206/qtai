@@ -1,4 +1,5 @@
 pub mod collections;
+
 pub mod config;
 pub mod config_edit;
 pub mod run;
@@ -89,15 +90,17 @@ enum Subcommands {
     #[command(alias = "s", about = "Search an item from a config.")]
     Search { query: String },
     #[command(alias = "cr", about = "Alter the default runner.")]
-    ChangeRunner{ new_runner: String,
-        #[arg(short = 'q', help = "Collection to change runner. Default is changing global runner.")]
+    ChangeRunner {
+        new_runner: String,
+        #[arg(
+            short = 'q',
+            help = "Collection to change runner. Default is changing global runner."
+        )]
         collection_query: Option<String>,
     },
 
     #[command(alias = "cm", about = "Alter the default menu for qtai run.")]
-    ChangeMenu{
-        new_menu: String,
-    },
+    ChangeMenu { new_menu: String },
 
     #[command(alias = "gcf", about = "Generates config file.")]
     GenerateConfigFile,
@@ -116,39 +119,49 @@ fn main() -> anyhow::Result<()> {
     // Run subcommand
     match cli.subcommand {
         Subcommands::Run {
-                    collection_input,
-                    runner,
-                    dmenu,
-                    selective,
-                } => crate::run::run(dmenu, &collection_input,runner, &config, cli.assume_yes, selective),
+            collection_input,
+            runner,
+            dmenu,
+            selective,
+        } => crate::run::run(
+            dmenu,
+            &collection_input,
+            runner,
+            &config,
+            cli.assume_yes,
+            selective,
+        ),
         Subcommands::TerminalRun {
-                    collection_input,
-                    runner,
-                    selective,
-                } => crate::run::terminal_run(
-                    &collection_input,
-                    runner,
-                    &config,
-                    cli.assume_yes,
-                    selective,
-                ),
-        Subcommands::GenerateConfigFile {} => Ok(()),
+            collection_input,
+            runner,
+            selective,
+        } => crate::run::terminal_run(
+            &collection_input,
+            runner,
+            &config,
+            cli.assume_yes,
+            selective,
+        ),
+        Subcommands::GenerateConfigFile => Ok(()),
         Subcommands::AddItem {
-                    collection_query,
-                    key,
-                    value,
-                } => add_item(collection_query, key, value, config_path, config),
+            collection_query,
+            key,
+            value,
+        } => add_item(collection_query, key, value, config_path, config),
         Subcommands::RemoveItem { query } => remove_item(&query, config_path, config),
         Subcommands::AddCollection { name } => add_collection(name, config_path, config),
         Subcommands::RemoveCollection { query } => {
-                    remove_collection(&query, config_path, config, cli.assume_yes)
-                }
+            remove_collection(&query, config_path, config, cli.assume_yes)
+        }
         Subcommands::List {
-                    collections,
-                    selective,
-                } => config.list_collections(&collections, selective),
+            collections,
+            selective,
+        } => config.list_collections(&collections, selective),
         Subcommands::Search { query } => config.search_items(&query),
-        Subcommands::ChangeRunner { new_runner, collection_query } => change_runner(&new_runner, collection_query, &config_path, &config),
+        Subcommands::ChangeRunner {
+            new_runner,
+            collection_query,
+        } => change_runner(&new_runner, collection_query, &config_path, &config),
         Subcommands::ChangeMenu { new_menu } => change_menu(&new_menu, &config_path, config),
     }
 }
@@ -161,7 +174,7 @@ fn determine_config(
     assume_yes: bool,
 ) -> anyhow::Result<Config> {
     let result = Figment::new()
-        .merge(Toml::file(&config_path))
+        .merge(Toml::file(config_path))
         .extract::<Config>();
     match result {
         anyhow::Result::Ok(c) => {
@@ -209,9 +222,9 @@ fn determine_config(
             } else {
                 // When there is a config file but Figment errors out, there is something wrong.
                 println!("{}", format!("{}", e).red());
-                return anyhow::Result::Err(anyhow!(
+                anyhow::Result::Err(anyhow!(
                     "Something went wrong from reading config file. Make sure to have default runner and default menu set on the top level."
-                ));
+                ))
             }
         }
     }

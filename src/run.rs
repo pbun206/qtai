@@ -116,7 +116,7 @@ pub fn display_pairs(pairs: &[(&str, (&str, &str))]) -> Vec<String> {
     }
 
     // Label each pair with a string
-    pairs
+    let mut res: Vec<String> = pairs
         .iter()
         .map(|i| {
             // (There shouldn't be any default values)
@@ -126,7 +126,10 @@ pub fn display_pairs(pairs: &[(&str, (&str, &str))]) -> Vec<String> {
                 i.1.0.to_owned()
             }
         })
-        .collect()
+        .collect();
+    // By key
+    res.sort();
+    return res;
 }
 
 // T is a place holder, it doesn't actually matter
