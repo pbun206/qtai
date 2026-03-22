@@ -128,7 +128,7 @@ pub fn display_pairs(pairs: &[(&str, (&str, &str))]) -> Vec<String> {
         })
         .collect();
     // By key
-    res.sort();
+    res.sort_by(|a,b| a.to_lowercase().cmp(&b.to_lowercase()));
     return res;
 }
 
